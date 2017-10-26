@@ -7,11 +7,7 @@ class Season < ActiveRecord::Base
     uniqueness: { case_sensitive: false }
 
   def self.current
-    if Date.today < switch_date
-      find_or_create_by(year: Date.today.year)
-    else
-      find_or_create_by(year: Date.today.year + 1)
-    end
+    find_or_create_by(year: 2017)
   end
 
   def self.next
