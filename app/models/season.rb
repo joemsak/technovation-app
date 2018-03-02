@@ -22,11 +22,7 @@ class Season < ActiveRecord::Base
   end
 
   def self.for(record)
-    if record.created_at < switch_date(record.created_at.year)
-      find_or_create_by(year: record.created_at.year)
-    else
-      find_or_create_by(year: record.created_at.year + 1)
-    end
+    2017
   end
 
   def self.switch_date(year = Time.current.year)
