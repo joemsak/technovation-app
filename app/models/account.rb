@@ -122,6 +122,22 @@ class Account < ActiveRecord::Base
       Team.none
   end
 
+  def as_json(*)
+    {
+      localId: SecureRandom.uuid,
+      email: email,
+      emailVerified: email_confirmed?,
+      passwordHash: Base64.encode64(password_digest),
+      displayName: name,
+      photoUrl: profile_image_url,
+      createdAt: created_at.to_date.strftime('%Q').to_i,
+      lastSignedInAt: last_logged_in_at ?
+                        last_logged_in_at.to_date.strftime('%Q').to_i : '',
+      phoneNumber: '',
+      providerUserInfo: [],
+    }
+  end
+
   scope :not_staff, -> {
     where.not("accounts.email ILIKE ?", "%joesak%")
   }
