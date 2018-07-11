@@ -102,7 +102,7 @@ module DatagridController
         grid = grid_klass.new(grid_params) { |scope| modify_html_scope(scope) }
 
         render json: {
-          filters: grid.filters,
+          filters: grid.filters.group_by { |f| f.options[:filter_group] },
           columns: grid.columns.map { |column|
             {
               name: column.name,
