@@ -88,18 +88,34 @@ module DatagridController
                       .to_unsafe_h
                   end
 
-        ExportJob.perform_later(
-          current_profile.id,
-          current_profile.class.name,
-          self.class.csv_datagrid_klass.name,
-          filters,
-          self.class.name,
-          self.class.csv_scope_modifier.to_s,
-          filename.sub(".csv", ""),
-          "csv"
-        )
+        # ExportJob.perform_later(
+        #   current_profile.id,
+        #   current_profile.class.name,
+        #   self.class.csv_datagrid_klass.name,
+        #   filters,
+        #   self.class.name,
+        #   self.class.csv_scope_modifier.to_s,
+        #   filename.sub(".csv", ""),
+        #   "csv"
+        # )
 
-        render json: {}
+        grid = grid_klass.new(grid_params) { |scope| modify_html_scope(scope) }
+
+        render json: {
+          filters: grid.filters,
+          columns: grid.columns.map { |column|
+            {
+              name: column.name,
+              supports_order: column.supports_order?,
+              options: column.options,
+            }
+          },
+          options: grid_params,
+          assets: grid.assets,
+          current_page: grid.assets.current_page,
+          per_page: grid.assets.per_page,
+          total_entries: grid.assets.total_entries,
+        }
       end
 
       f.csv do
