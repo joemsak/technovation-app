@@ -17,6 +17,7 @@ RSpec.describe "Team locations", :js do
       click_button "Next"
       click_button  "Confirm"
 
+      click_button "Location"
       expect(page).to have_content("Los Angeles, California, United States")
     end
   end
